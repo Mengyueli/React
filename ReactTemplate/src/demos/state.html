@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>React-Template</title>
+	<link rel="stylesheet" href="../css/main.css">
+    <script src="../js/react.min.js"></script>
+    <script src="../js/react-dom.min.js"></script>
+    <script src="../js/browser.min.js"></script>
+</head>
+<body>
+	<!-- 容器 -->
+    <div id="container"></div>
+<script type="text/babel">
+    var CheckBox = React.createClass({
+        // 初始化状态值
+        getInitialState: function () {
+            return {
+                checked: true
+            }
+        },
+        handleChecked: function() {
+            this.setState({checked : !this.state.checked})
+        },
+        render: function () {
+            var msg;//变量
+            if (this.state.checked) {
+                msg = "checked";
+            } else {
+                msg = "unchecked";
+            }
+            return (
+                <div>
+                  <input type="checkbox" defaultChecked={this.state.checked} onChange={this.handleChecked} />
+                  <h3>CheckBox is {msg}</h3>  
+                  <p>{this.props.title}</p>
+                </div>
+            );
+        }
+    });
+	ReactDOM.render(
+		<CheckBox title="属性" />,
+		document.getElementById('container')
+    );
+    // 状态和属性最大的区别就是：
+        //状态可以通过业务逻辑改变，属性是不可以改变的
+        //状态是在开始初始化的，属性是在组件中书写的
+</script>
+</body>
+</html>

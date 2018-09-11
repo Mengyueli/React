@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>React-Template</title>
+	<link rel="stylesheet" href="../css/main.css">
+    <script src="../js/react.min.js"></script>
+    <script src="../js/react-dom.min.js"></script>
+    <script src="../js/browser.min.js"></script>
+</head>
+<body>
+	<!-- 容器 -->
+	<div id="container"></div>
+<script type="text/babel">
+	var Board = React.createClass({
+		getInitialState: function () {
+			return {
+				comments: ['hello', 'react', 'study'],
+			}
+		},
+		updateValue: function (value, index) {
+			var arr = this.state.comments;
+			arr[index] = value;
+			this.setState({comments: arr});
+		},
+		deleteValue: function (i) {
+			var arr = this.state.comments;
+			arr.splice(i, 1);
+			this.setState({comments: arr});
+		},
+		eachComment: function(text, i){
+						return (
+							<Comment key={i} updateComment={this.updateValue} deleteComments={this.deleteValue} index={i}>{text}</Comment>
+						)
+		},
+		addNewValue: function (text) {
+			var arr =  this.state.comments;
+			arr.push(text);
+			this.setState({comments: arr});
+		},
+		render: function() {
+			return (
+				<div>
+					<button className="button-info create" onClick={this.addNewValue.bind(null, 'default Text')}>Add New</button>
+					<div className="board">
+						{
+                        this.state.comments.map(this.eachComment)
+						}
+					</div>
+				</div>
+			)
+		}
+	})
+	var Comment = React.createClass({
+		getInitialState: function () {
+			return {
+				editing: false
+			}
+		},
+		edit: function () {
+			this.setState({editing: true});
+		},
+		remove: function() {
+			this.props.deleteComments(this.props.index);
+		},
+		save: function () {
+			var value = this.refs.editValue.value;
+			this.setState({editing: false});
+			this.props.updateComment(value, this.props.index)
+		},
+		renderForm: function () {
+			return (
+				<div className="commentContainer">
+					<textarea defaultValue={this.props.children} ref="editValue"></textarea>
+					<button className="button-success" onClick={this.save}>save</button>
+				</div>
+			)
+		},
+		renderNormal: function () {
+			return (
+				<div className="commentContainer">
+					<div>{this.props.children}</div>
+					<button className="button-primary" onClick={this.edit}>Edit</button>
+					<button className="button-danger" onClick={this.remove}>Remove</button>
+				</div>
+			)
+		},
+		render: function (){
+			if (this.state.editing) {
+				return this.renderForm();
+			} else {
+				return this.renderNormal();
+			}
+		}
+	})
+	ReactDOM.render(
+		<Board/>,
+		document.getElementById('container')
+	);
+</script>
+</body>
+</html>
